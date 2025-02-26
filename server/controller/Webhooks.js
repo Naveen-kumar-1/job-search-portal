@@ -5,6 +5,7 @@ import User from "../models/User.js";
 
 export const clerkWebhooks = async (req, res) => {
   try {
+    console.log("ENtred into webkood try block");
     // create s SVIX instance with clear webhook secret
 
     const whook = new Webhook(process.env.CLERWEB_HOOK_SECRET);
@@ -18,7 +19,8 @@ export const clerkWebhooks = async (req, res) => {
     //Getting data fro req body
 
     const { data, type } = req.body;
-
+    console.log(type);
+    
     //Swich case for diffren events
 
     switch (type) {
@@ -30,6 +32,7 @@ export const clerkWebhooks = async (req, res) => {
             image:data.image_url,
             resume:''
         };
+        console.log(userData);
         await User.create(userData);
         res.json({})
         break;
