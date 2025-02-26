@@ -1,0 +1,83 @@
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@100..900&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
+@import "tailwindcss";
+
+*{
+    font-family: Outfit;
+}
+@layer base{
+    html{
+        scroll-behavior: smooth;
+    }
+}
+::-webkit-scrollbar{
+    display: none;
+}
+.rich-text {
+    font-family: 'Roboto', sans-serif;
+    font-size: 17px;
+    line-height: 1.7;
+    color: #2c3e50;
+    background-color: #ffffff;
+    padding: 25px;
+    border-left: 5px solid #3498db;
+    border-radius: 8px;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.05);
+    max-width: 900px;
+    margin: 30px auto;
+    transition: all 0.3s ease;
+  }
+  
+  .rich-text:hover {
+    box-shadow: 0 12px 24px rgba(0, 0, 0, 0.1);
+  }
+  
+  .rich-text h2 {
+    font-size: 26px;
+    color: #2980b9;
+    margin-bottom: 18px;
+    text-transform: uppercase;
+  }
+  
+  .rich-text h3 {
+    font-size: 22px;
+    color: #34495e;
+    margin-bottom: 12px;
+  }
+  
+  .rich-text p {
+    margin-bottom: 18px;
+    color: #2c3e50;
+  }
+  
+  .rich-text ol {
+    padding-left: 25px;
+    margin-bottom: 25px;
+  }
+  
+  .rich-text ol li {
+    margin-bottom: 12px;
+    color: #34495e;
+    position: relative;
+    padding-left: 10px;
+  }
+  
+  .rich-text ol li:before {
+    content: '✓';
+    position: absolute;
+    left: -20px;
+    color: #2ecc71;
+    font-weight: bold;
+  }
+  
+  .rich-text a {
+    color: #e74c3c;
+    text-decoration: underline;
+    font-weight: 500;
+  }
+  
+  .rich-text a:hover {
+    color: #c0392b;
+    text-decoration: none;
+  }
+  
+  
