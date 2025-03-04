@@ -2,6 +2,7 @@ import React, { useContext, useEffect, useState } from "react";
 import { AppContext } from "../context/AppContext";
 import { assets, JobCategories, JobLocations } from "../assets/assets";
 import JobCart from "./JobCart";
+import Loading from "./Loading";
 
 const JobListing = () => {
   const { isSearched, searchFilter, setSearchFilter, jobs } =
@@ -42,7 +43,7 @@ const JobListing = () => {
   },[jobs,selectedCategories,selectedLocations,searchFilter])
 
 
-  return (
+  return filterdJobs ? (
     <div className="container 2xl:px-2 mx-auto flex flex-col lg:flex-row max-lg:space-y-8 py-8">
       {/* Side Bar*/}
       <div className="w-full lg:w-1/4 bg-white px-4">
@@ -174,6 +175,6 @@ const JobListing = () => {
         )}
       </section>
     </div>
-  );
+  ):<div><Loading/></div>;
 };
 export default JobListing;
