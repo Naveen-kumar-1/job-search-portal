@@ -16,10 +16,14 @@ const Application = () => {
   const [resume, setResume] = useState(null);
   const { backendUrl, userData, userApplications, fetchUserData } = useContext(AppContext);
 
+  const [isLoading, setIsLoading] = useState(false); // Add loading state
+
   const updateResume = async () => {
+    setIsLoading(true); // Start loading
     try {
       if (!resume) {
         toast.error("Please select a resume before saving.");
+        setIsLoading(false);
         return;
       }
   
@@ -27,7 +31,7 @@ const Application = () => {
       formData.append("resume", resume);
   
       const token = await getToken();
-      
+  
       const { data } = await axios.post(
         `${backendUrl}/api/users/update-resume`,
         formData,
@@ -43,10 +47,11 @@ const Application = () => {
     } catch (error) {
       console.error("Resume Upload Error:", error);
       toast.error(error.response?.data?.message || error.message);
+    } finally {
+      setIsLoading(false); // Stop loading
+      setIsEdit(false); // Close edit mode
+      setResume(null); // Clear the resume
     }
-  
-    setIsEdit(false);
-    setResume(null);
   };
 
   return userData ? (
@@ -55,24 +60,58 @@ const Application = () => {
       <div className="container px-4 min-h-[65vh] 2xl:px-20 mx-auto my-10">
         <h2 className="text-xl font-semibold">Your Resume</h2>
         <div className="flex gap-2 mb-6 mt-3">
-          {isEdit || (userData && userData.resume === '') ? (
-            <>
-              <label className="flex items-center" htmlFor="resumeUpload">
-                <p className="bg-blue-100 text-blue-600 px-4 py-2 rounded-lg mr-2">{resume ? resume.name : 'Select Resume'}</p>
-                <input id="resumeUpload" onChange={e => setResume(e.target.files[0])} accept="application/pdf" type="file" hidden />
-                <img src={assets.profile_upload_icon} alt="Upload" />
-              </label>
-              <button onClick={updateResume} className="bg-green-100 border border-green-400 rounded-lg px-4 py-2">Save</button>
-            </>
+          {/* Only hide the update resume section when loading */}
+          {isLoading ? (
+           <div className="flex items-center justify-center w-[10px] h-[10px] m-6 py-4">
+           <Loading className="w-1 h-1"/>
+         </div>
+         // Show loading indicator during upload
           ) : (
-            <div className="flex gap-2">
-              <a href={userData.resume} target="_blank" rel="noopener noreferrer" className="bg-blue-100 text-blue-600 px-4 py-2 rounded-lg">
-                Resume
-              </a>
-              <button onClick={() => setIsEdit(true)} className="text-gray-500 border border-gray-300 rounded-lg px-4 py-2">Edit</button>
-            </div>
+            <>
+              {isEdit || (userData && userData.resume === '') ? (
+                <>
+                  <label className="flex items-center" htmlFor="resumeUpload">
+                    <p className="bg-blue-100 text-blue-600 px-4 py-2 rounded-lg mr-2">
+                      {resume ? resume.name : 'Select Resume'}
+                    </p>
+                    <input
+                      id="resumeUpload"
+                      onChange={e => setResume(e.target.files[0])}
+                      accept="application/pdf"
+                      type="file"
+                      hidden
+                    />
+                    <img src={assets.profile_upload_icon} alt="Upload" />
+                  </label>
+                  <button
+                    onClick={updateResume}
+                    className="bg-green-100 border border-green-400 rounded-lg px-4 py-2"
+                  >
+                    Save
+                  </button>
+                </>
+              ) : (
+                <div className="flex gap-2">
+                  <a
+                    href={userData.resume}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="bg-blue-100 text-blue-600 px-4 py-2 rounded-lg"
+                  >
+                    Resume
+                  </a>
+                  <button
+                    onClick={() => setIsEdit(true)}
+                    className="text-gray-500 border border-gray-300 rounded-lg px-4 py-2"
+                  >
+                    Edit
+                  </button>
+                </div>
+              )}
+            </>
           )}
         </div>
+
         <h2 className="text-xl font-semibold mb-4">Job Applied</h2>
         <table className="min-w-full bg-white border rounded-lg"> 
           <thead>
@@ -106,7 +145,9 @@ const Application = () => {
       </div>
       <Footer />
     </>
-  ):(<Loading/>)
+  ) : (
+    <Loading /> // Keep the final Loading as is
+  );
 };
 
 export default Application;
